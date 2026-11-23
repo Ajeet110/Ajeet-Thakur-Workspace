@@ -3,16 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sale Deed Generator — Ajeet Thakur Workspace</title>
-  <meta name="description" content="Generate print-ready sale deeds in minutes. Three versions — Basic, Advanced and Expert — from Ajeet Thakur Workspace." />
+  <title>Legal Document Workshop — Ajeet Thakur Workspace</title>
+  <meta name="description" content="Generate print-ready legal documents in minutes. Agreements, Sale Deeds, and more from Ajeet Thakur Workspace." />
   <meta name="theme-color" content="#4f46e5" />
-
-  <!--
-    LINK MAP — adjust here if your build output changes:
-      Card 1 (Basic)    -> version1/d.html
-      Card 2 (Advanced) -> version2/        (Vite project — use version2/dist/ for a production build)
-      Card 3 (Expert)   -> version3/        (Vite project — use version3/dist/ for a production build)
-  -->
 
   <style>
     /* ---------- Design tokens ---------- */
@@ -31,16 +24,12 @@
       --max: 1140px;
     }
 
-    *,
-    *::before,
-    *::after { box-sizing: border-box; }
-
+    *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                   Helvetica, Arial, "Apple Color Emoji", sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: var(--ink);
       line-height: 1.55;
       -webkit-font-smoothing: antialiased;
@@ -138,12 +127,7 @@
     }
 
     .nav a:hover { color: var(--ink); background: rgba(15, 23, 42, .045); }
-
-    .nav a.active {
-      color: var(--brand);
-      background: rgba(79, 70, 229, .1);
-      font-weight: 650;
-    }
+    .nav a.active { color: var(--brand); background: rgba(79, 70, 229, .1); font-weight: 650; }
 
     /* ---------- Buttons ---------- */
     .btn {
@@ -214,7 +198,7 @@
     }
 
     .lede {
-      max-width: 640px;
+      max-width: 660px;
       margin: 18px auto 0;
       font-size: clamp(.98rem, 1.6vw, 1.08rem);
       color: var(--ink-soft);
@@ -294,8 +278,7 @@
       transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
     }
 
-    .card:hover,
-    .card:focus-visible {
+    .card:hover, .card:focus-visible {
       transform: translateY(-6px);
       border-color: color-mix(in srgb, var(--accent) 45%, transparent);
       box-shadow: var(--shadow-hover);
@@ -307,9 +290,10 @@
       outline-offset: 3px;
     }
 
-    .card--basic    { --accent: #4f46e5; --accent-soft: rgba(79, 70, 229, .1); --accent-grad: linear-gradient(135deg, #818cf8, #4f46e5); }
+    /* Colors for each card type */
+    .card--agreements { --accent: #059669; --accent-soft: rgba(5, 150, 105, .1); --accent-grad: linear-gradient(135deg, #34d399, #059669); }
     .card--advanced { --accent: #0284c7; --accent-soft: rgba(2, 132, 199, .1); --accent-grad: linear-gradient(135deg, #38bdf8, #0284c7); }
-    .card--expert   { --accent: #7c3aed; --accent-soft: rgba(124, 58, 237, .1); --accent-grad: linear-gradient(135deg, #a78bfa, #7c3aed); }
+    .card--expert { --accent: #7c3aed; --accent-soft: rgba(124, 58, 237, .1); --accent-grad: linear-gradient(135deg, #a78bfa, #7c3aed); }
 
     .card--featured {
       border-color: rgba(2, 132, 199, .38);
@@ -375,6 +359,7 @@
       margin: 0;
       font-size: .92rem;
       color: var(--ink-soft);
+      line-height: 1.5;
     }
 
     .features {
@@ -487,10 +472,7 @@
       transition: color .2s ease, transform .2s ease;
     }
 
-    .footer-col a:hover {
-      color: #fff;
-      transform: translateX(2px);
-    }
+    .footer-col a:hover { color: #fff; transform: translateX(2px); }
 
     .footer-bottom {
       display: flex;
@@ -509,26 +491,14 @@
 
     /* ---------- Responsive ---------- */
     @media (max-width: 980px) {
-      .cards {
-        grid-template-columns: minmax(0, 1fr);
-        max-width: 520px;
-        margin-inline: auto;
-        gap: 28px;
-      }
+      .cards { grid-template-columns: minmax(0, 1fr); max-width: 520px; margin-inline: auto; gap: 28px; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .footer-brand { grid-column: 1 / -1; }
     }
 
     @media (max-width: 760px) {
       .header-inner { flex-wrap: wrap; gap: 10px 16px; }
-      .nav {
-        order: 3;
-        width: 100%;
-        overflow-x: auto;
-        gap: 2px;
-        padding-bottom: 2px;
-        scrollbar-width: none;
-      }
+      .nav { order: 3; width: 100%; overflow-x: auto; gap: 2px; padding-bottom: 2px; scrollbar-width: none; }
       .nav::-webkit-scrollbar { display: none; }
       .hero { padding-top: 52px; }
       .section-head { margin-top: 56px; }
@@ -561,83 +531,80 @@
 
       <nav class="nav" aria-label="Primary">
         <a href="./" class="active" aria-current="page">Home</a>
-        <a href="#tools">Generators</a>
+        <a href="#tools">Workshop</a>
         <a href="https://ajeet110.github.io/myfirstweb/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAVURzFleHRuA2FlbQIxMQBwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp2CIHU642p1dn78BBg15_GOKTbsCSQvvtj50x8ISqhhv3TsZsU99PLkR1z4X_aem_KWr6mNDz2m6a6wEiHB2PVA">About</a>
         <a href="https://www.instagram.com/ajeet_up82?mdxt=cGNyejJldWN3M3V5">Contact</a>
       </nav>
 
-      <a class="btn btn-primary btn-sm" href="#tools">Launch a Generator</a>
+      <a class="btn btn-primary btn-sm" href="#tools">Launch Studio</a>
     </div>
   </header>
 
   <main>
     <!-- ================= HERO ================= -->
     <section class="hero container">
-      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Ajeet Thakur Workspace · Legal Documents</span>
-      <h1>Sale Deed <span class="grad">Generator</span></h1>
+      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>Ajeet Thakur Workspace · Legal Tools</span>
+      <h1>Legal Document <span class="grad">Workshop</span></h1>
       <p class="lede">
-        Draft a complete, print-ready sale deed in minutes. Choose the version that matches
-        the complexity of your property transaction — from a quick basic deed to a fully
-        guided expert workflow.
+        Generate print-ready legal documents in minutes. A growing suite of professional tools 
+        for agreements, sale deeds, and property paperwork — all running directly in your browser.
       </p>
       <div class="hero-meta">
-        <span>3 versions</span>
+        <span>Multiple Tools</span>
         <span>No sign-up needed</span>
         <span>Print &amp; PDF ready</span>
-        <span>Works in your browser</span>
+        <span>100% Secure</span>
       </div>
     </section>
 
     <!-- ================= CARDS ================= -->
     <section id="tools" class="container" style="scroll-margin-top: 90px;">
       <div class="section-head">
-        <h2>Choose your version</h2>
-        <p>All three generators share the same clean layout and print-ready output.</p>
+        <h2>Choose your generator</h2>
+        <p>Select a tool below. Each generator is built for precision, speed, and professional formatting.</p>
       </div>
 
       <div class="cards">
-        <!-- Card 1 -->
-        <a class="card card--basic" href="version1/dee.html">
+        <!-- Card 1: Agreements -->
+        <a class="card card--agreements" href="version1/index.html">
           <div class="card-top">
             <span class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                   stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
-                <path d="M14 3v5h5" />
-                <path d="M9 13h6M9 17h4" />
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <path d="M14 2v6h6" />
+                <path d="M9 15h6M9 11h6" />
+                <path d="M9 19h6" />
               </svg>
             </span>
-            <span class="pill">Basic</span>
+            <span class="pill">Agreements</span>
           </div>
 
-          <h3>Sale Deed — Basic</h3>
-          <p>The fastest way to produce a simple, single-page sale deed for a straightforward transfer.</p>
+          <h3>Agreements Studio</h3>
+          <p>Create legally formatted Agreement to Sell and Rent Agreements with exact live previews.</p>
 
           <ul class="features">
-            <li>Essential party &amp; property fields</li>
-            <li>Instant, print-ready layout</li>
-            <li>No installation, no sign-up</li>
+            <li>Agreement to Sell generator</li>
+            <li>Rent Agreement generator</li>
+            <li>Exact legal formatting &amp; spacing</li>
           </ul>
 
-          <code class="path">version1/d.html</code>
+          <code class="path">version1/index.html</code>
 
           <span class="card-cta">
-            Open generator
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            Open Generator
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
           </span>
         </a>
 
-        <!-- Card 2 -->
+        <!-- Card 2: Sale Deed Advanced -->
         <a class="card card--advanced card--featured" href="version2/index.html">
           <span class="badge-pop">Most used</span>
 
           <div class="card-top">
             <span class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                   stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M4 7h8M16 7h4M4 17h4M12 17h8" />
                 <circle cx="14" cy="7" r="2" />
                 <circle cx="10" cy="17" r="2" />
@@ -647,7 +614,7 @@
           </div>
 
           <h3>Sale Deed — Advanced</h3>
-          <p>More fields, smarter defaults and live preview — built for detailed, multi-clause deeds.</p>
+          <p>More fields, smarter defaults and live preview — built for detailed, multi-clause sale deeds.</p>
 
           <ul class="features">
             <li>Expanded clauses &amp; optional sections</li>
@@ -655,23 +622,21 @@
             <li>Modern app experience (Vite)</li>
           </ul>
 
-          <code class="path">version2/</code>
+          <code class="path">version2/index.html</code>
 
           <span class="card-cta">
-            Open generator
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            Open Generator
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
           </span>
         </a>
 
-        <!-- Card 3 -->
+        <!-- Card 3: Sale Deed Expert -->
         <a class="card card--expert" href="version3/index.html">
           <div class="card-top">
             <span class="icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                   stroke-linecap="round" stroke-linejoin="round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6z" />
                 <path d="M9 12l2 2 4-4" />
               </svg>
@@ -688,12 +653,11 @@
             <li>Polished, professional final output</li>
           </ul>
 
-          <code class="path">version3/</code>
+          <code class="path">version3/index.html</code>
 
           <span class="card-cta">
-            Open generator
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            Open Generator
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
           </span>
@@ -714,14 +678,14 @@
           </span>
         </a>
         <p>
-          Simple, reliable document tools for property and legal paperwork —
-          built and maintained in the Ajeet Thakur Workspace.
+          A complete legal document workshop. Simple, reliable tools for property and legal paperwork — 
+          built and maintained for professionals and individuals alike.
         </p>
       </div>
 
       <nav class="footer-col" aria-label="Generators">
         <h4>Generators</h4>
-        <a href="version1/dee.html">Sale Deed — Basic</a>
+        <a href="version1/index.html">Agreements Studio</a>
         <a href="version2/index.html">Sale Deed — Advanced</a>
         <a href="version3/index.html">Sale Deed — Expert</a>
       </nav>
@@ -736,7 +700,7 @@
 
       <nav class="footer-col" aria-label="Company">
         <h4>Company</h4>
-        <a href="#https://ajeet110.github.io/myfirstweb/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAVURzFleHRuA2FlbQIxMQBwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp2CIHU642p1dn78BBg15_GOKTbsCSQvvtj50x8ISqhhv3TsZsU99PLkR1z4X_aem_KWr6mNDz2m6a6wEiHB2PVA">About</a>
+        <a href="https://ajeet110.github.io/myfirstweb/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAb21jcAVURzFleHRuA2FlbQIxMQBwZG9mAnNydGMGYXBwX2lkDzU2NzA2NzM0MzM1MjQyNwABp2CIHU642p1dn78BBg15_GOKTbsCSQvvtj50x8ISqhhv3TsZsU99PLkR1z4X_aem_KWr6mNDz2m6a6wEiHB2PVA">About</a>
         <a href="https://www.instagram.com/ajeet_up82?mdxt=cGNyejJldWN3M3V5">Contact</a>
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Use</a>
@@ -745,7 +709,7 @@
 
     <div class="container footer-bottom">
       <p>&copy; <span id="year">2025</span> Ajeet Thakur Workspace. All rights reserved.</p>
-      <p class="footer-note">Generated deeds are templates — please review with a legal professional.</p>
+      <p class="footer-note">Generated documents are templates — please review with a legal professional.</p>
     </div>
   </footer>
 
