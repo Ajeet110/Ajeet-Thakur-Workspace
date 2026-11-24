@@ -234,19 +234,19 @@ const defaultState = {
   gpa: {
     docTitle: "GENERAL POWER OF ATTORNEY",
     execPlace: "NEW DELHI",
-    execDate: "3RD DAY OF JANUARY, 2025",
+    execDate: "3RD DAY OF APRIL 2021",
     
-    executantName: "SHRI RAMESH KUMAR",
+    executantName: "SHRI GYAN SINGH",
     executantRelation: "S/O",
-    executantFather: "SHRI SURESH KUMAR",
-    executantAddress: "HOUSE NO. 123, GALI NO. 4, MAHAVIR ENCLAVE, NEW DELHI-110045",
+    executantFather: "SHRI AMAR RAM",
+    executantAddress: "R/O RZ-K-16, TAMIL ENCLAVE, VIJAY ENCLAVE, NEW DELHI-110045",
     
-    attorneyName: "SHRI MAHESH KUMAR",
-    attorneyRelation: "S/O",
-    attorneyFather: "SHRI SURESH KUMAR",
-    attorneyAddress: "HOUSE NO. 456, GALI NO. 5, MAHAVIR ENCLAVE, NEW DELHI-110045",
+    attorneyName: "SMT. SUSHILA DEVI",
+    attorneyRelation: "W/O",
+    attorneyFather: "SHRI NARENDER SINGH",
+    attorneyAddress: "R/O RZ-A-72, GALI NO. 5, DWARKA PURI, VIJAY ENCLAVE, NEW DELHI-110045",
     
-    propertyDetails: "BEARING NO. 123 (OLD PLOT NO. 45), LAND AREA MEASURING 24 SQ. YDS., OUT OF KHASRA NO. 82/9, SITUATED IN THE AREA OF VILLAGE PALAM, AND THE COLONY KNOWN AS MAHAVIR ENCLAVE, NEW DELHI-110045",
+    propertyDetails: "BEARING NO. RZ-K-16-C ( OLD PLOT NO. 26 ), LAND AREA MEASURING 24 SQ. YDS. , OUT OF KHASRA NO. 7/1/2, SITUATED IN THE AREA OF VILLAGE MIRZAPUR, AND THE COLONY KNOWN AS TAMIL ENCLAVE, VIJAY ENCLAVE, NEW DELHI-110045, AND WITH THE FREE HOLD RIGHTS, TITLE AND INTEREST OF THE SAID LAND UNDER THE SAID",
     
     boundaryEast: "GALI 10 FT. WIDE",
     boundaryWest: "OTHER'S PLOT",
@@ -256,12 +256,12 @@ const defaultState = {
     witnessHeading: "NOW THIS GPA WITNESSETH AS UNDER :-",
     page1ClauseCount: 1,
     clauses: [
-      "To manage, control, look after, supervise and take care of the above said property/plot as our said attorney deem fit and proper and to pay the lease money and balance price if any other dues, regarding the above mentioned property/plot to get the lease/conveyance."
+      "To manage, control, look after, supervise and take care the above said property/plot as our said attorney deem fit and proper and to pay the lease money and balance price if any other dues, regarding the above mentioned property/plot to get the lease/conveyance."
     ]
   }
 };
 
-const STORAGE_KEY = 'agreement_studio_draft_v10';
+const STORAGE_KEY = 'agreement_studio_draft_v13';
 
 let state = loadState();
 
@@ -354,26 +354,31 @@ function buildPreamble(d){
   if (currentType === 'gpa') {
     html += `<div class="doc-title">${esc(d.docTitle)}</div>`;
     
-    html += `<p class="doc-para" style="text-transform: uppercase;">
-      THIS GENERAL POWER OF ATTORNEY IS MADE AND EXECUTED AT <strong>${esc(d.execPlace)}</strong> ON THIS <strong>${esc(d.execDate)}</strong>, BY <strong>${esc(d.executantName)}</strong> ${esc(d.executantRelation)} <strong>${esc(d.executantFather)}</strong> R/O <strong>${esc(d.executantAddress)}</strong>, (Hereinafter Called the Executant/s), do hereby appoint, constitute and nominate to <strong>${esc(d.attorneyName)}</strong> ${esc(d.attorneyRelation)} <strong>${esc(d.attorneyFather)}</strong>, R/O <strong>${esc(d.attorneyAddress)}</strong>, (Hereinafter Called the General Attorney).
+    html += `<p class="doc-para">
+      THIS GENERAL POWER OF ATTORNEY IS MADE AND EXECUTED AT <strong>${esc(d.execPlace)}</strong> ON THIS <strong>${esc(d.execDate)}</strong>, BY <strong>${esc(d.executantName)}</strong> ${esc(d.executantRelation)} <strong>${esc(d.executantFather)}</strong> ${esc(d.executantAddress)}, (Hereinafter Called the Executant/s), do hereby appoint, constitute and nominate to <strong>${esc(d.attorneyName)}</strong> ${esc(d.attorneyRelation)} <strong>${esc(d.attorneyFather)}</strong>, ${esc(d.attorneyAddress)}, (Hereinafter Called the General Attorney).
     </p>`;
     
-    html += `<p class="doc-para" style="text-transform: uppercase;">
-      WHEREAS, THE SAID EXECUTANT IS THE ABSOLUTE OWNER AND IN POSSESSION OF BUILT-UP PROPERTY/PLOT <strong>${esc(d.propertyDetails)}</strong>, AND WITH THE FREE HOLD RIGHTS, TITLE AND INTEREST OF THE SAID LAND UNDER THE SAID PROPERTY/PLOT, (Hereinafter Called the Property/Plot) AND WHICH IS BOUNDED AS UNDER:-
+    html += `<p class="doc-para">
+      WHEREAS, THE SAID EXECUTANT IS THE ABSOLUTE OWNER AND IN POSSESSION OF BUILT-UP PROPERTY/PLOT <strong>${esc(d.propertyDetails)}</strong> PROPERTY/PLOT, (Hereinafter Called the Property/Plot) AND WHICH IS BOUNDED AS UNDER:-
     </p>`;
     
-    html += `<div style="margin-left: 20pt;">
-      <p class="doc-para" style="text-transform: uppercase; margin-bottom: 2px;">EAST: <strong>${esc(d.boundaryEast)}</strong>.</p>
-      <p class="doc-para" style="text-transform: uppercase; margin-bottom: 2px;">WEST: <strong>${esc(d.boundaryWest)}</strong>.</p>
-      <p class="doc-para" style="text-transform: uppercase; margin-bottom: 2px;">NORTH: <strong>${esc(d.boundaryNorth)}</strong>.</p>
-      <p class="doc-para" style="text-transform: uppercase; margin-bottom: 7px;">SOUTH: <strong>${esc(d.boundarySouth)}</strong>.</p>
-    </div>`;
+    html += `
+    <table style="width: 100%; margin-bottom: 7px; border-collapse: collapse; line-height: 1.38;">
+      <tr>
+        <td style="width: 50%; vertical-align: top; font-size: 12pt;">EAST: <strong>${esc(d.boundaryEast)}</strong>.</td>
+        <td style="width: 50%; vertical-align: top; font-size: 12pt;">WEST: <strong>${esc(d.boundaryWest)}</strong>.</td>
+      </tr>
+      <tr>
+        <td style="vertical-align: top; font-size: 12pt;">NORTH: <strong>${esc(d.boundaryNorth)}</strong>.</td>
+        <td style="vertical-align: top; font-size: 12pt;">SOUTH: <strong>${esc(d.boundarySouth)}</strong>.</td>
+      </tr>
+    </table>`;
     
-    html += `<p class="doc-para" style="text-transform: uppercase;">
-      AND WHEREAS, I AM UNABLE TO MANAGE, CONTROL, SUPERVISION AND LOOK AFTER THE ABOVE MENTIONED SHARE OF THE SAID PROPERTY/PLOT, THEREFORE, I DO HEREBY APPOINT, NOMINATE AND CONSTITUTE MY ABOVE MENTIONED GENERAL ATTORNEY AS MY TRUE, LEGAL AND LAWFUL GENERAL ATTORNEY(S) TO DO THE FOLLOWING ACTS, DEEDS AND THINGS FOR ME & IN MY NAME AND ON MY BEHALF & THE SAID PROPERTY/PLOT IN THE FOLLOWING MANNER.
+    html += `<p class="doc-para">
+      AND WHEREAS, I AM UNABLE TO MANAGE, CONTROL, SUPERVISION AND LOOK AFTER THE ABOVE MENTIONED SHARE OF THE SAID PROPERTY/PLOT, THEREFORE, I DO HEREBY APPOINT, NOMINATE AND CONSTITUTE MY ABOVE MENTIONED GENERAL ATTORNEY AS MY TRUE, LEGAL AND LAWFUL GENERAL ATTORNEY(S) TO DO THE FOLLOWING ACTS, DEEDS AND THINGS FOR ME & IN MY NAME AND ON MY BEHALF & THE SAID PROPERTY/PLOT IN THE FOLLOWING MANNERS.
     </p>`;
     
-    html += `<div class="witness-heading" style="text-transform: uppercase;">${esc(d.witnessHeading)}</div>`;
+    html += `<div class="witness-heading">${esc(d.witnessHeading)}</div>`;
     return html;
   }
 
@@ -397,11 +402,8 @@ function buildPreamble(d){
     const regW = numberToWords(d.regAmount);
 
     html += numPara(1, `The first party is the absolute owner and in possession of the property <strong>${esc(d.propertyDetails)}</strong> (hereafter referred to as the ‘’ said property’’)`);
-    
     html += numPara(2, `The First Party has agreed to sell and the Second Party has agreed to purchase the said property for a total sale consideration of Rs. ${esc(d.saleAmount)}/- (Rupees ${saleW} Only).`);
-    
     html += numPara(3, `Out of the total sale consideration, the Second Party has paid a sum of Rs. ${esc(d.advanceAmount)}/- (Rupees ${advW} Only) though UPI dated 29.09.2026 in cash as carnest money/advance to the First Party, the receipt whereof the First Party hereby acknowledges.`);
-    
     html += numPara(4, `Both parties have mutually agreed that the Sale Deed of the said Property shall be executed and registered before the concerned Sub-Registrar for a consideration amount of Rs. ${esc(d.regAmount)}/- (Rupees ${regW} Only).`);
     
     if(d.extraRecitals && d.extraRecitals.length > 0) {
@@ -430,21 +432,7 @@ function buildClausesRange(d, from, to){
 
 function buildSignatureBlock(d){
   if (currentType === 'gpa') {
-    return `
-      <table class="sig-table" style="margin-top: 40px;">
-        <tr>
-          <td style="width: 50%; text-align: left; vertical-align: bottom; font-weight: bold;">
-            ___________________________<br>
-            EXECUTANT<br>
-            (Signature &amp; Thumb Impression)
-          </td>
-          <td style="width: 50%; text-align: right; vertical-align: bottom; font-weight: bold;">
-            ___________________________<br>
-            GENERAL ATTORNEY<br>
-            (Signature &amp; Thumb Impression)
-          </td>
-        </tr>
-      </table>`;
+    return `<p style="text-align: right; margin-top: 30px; font-weight: bold;">CONTD...P/3</p>`;
   }
 
   let title = currentType === 'sell' ? "IN WITNESS WHEREOF" : "IN WITNESS WHERE OF";
@@ -476,8 +464,14 @@ function buildSignatureBlock(d){
    ============================================================ */
 function renderDocument(){
   const d = state[currentType];
-  const brk = clampBreak(d);
+  
+  if (currentType === 'gpa') {
+    const content = buildPreamble(d) + buildClausesRange(d, 0, d.clauses.length) + buildSignatureBlock(d);
+    document.getElementById('legal-document').innerHTML = `<div class="legal-sheet" id="sheet-1">${content}</div>`;
+    return;
+  }
 
+  const brk = clampBreak(d);
   const page1 = buildPreamble(d) + buildClausesRange(d, 0, brk);
   const page2 = buildClausesRange(d, brk, d.clauses.length) + buildSignatureBlock(d);
 
@@ -669,11 +663,13 @@ function renderForm(){
   html += `
     <div class="editor-section">
       <h3>${currentType === 'gpa' ? '6' : '5'}. Terms &amp; Conditions (Clauses)</h3>
+      ${currentType !== 'gpa' ? `
       <div class="form-group">
         <label>Page 1 ends after clause no.</label>
         <input type="number" min="1" max="30" value="${data.page1ClauseCount}"
                oninput="updateField('page1ClauseCount', parseInt(this.value) || 1)">
       </div>
+      ` : ''}
       <div id="clauses-editor"></div>
       <button class="btn" style="background:#475569; color:#fff; margin-top:6px;" onclick="addClause()">+ Add Condition</button>
     </div>
@@ -818,10 +814,16 @@ function resetDefault(){
    ============================================================ */
 function downloadWord(){
   const d = state[currentType];
-  const brk = clampBreak(d);
+  let body1 = '', body2 = '', pageBreak = '';
 
-  const body1 = buildPreamble(d) + buildClausesRange(d, 0, brk);
-  const body2 = buildClausesRange(d, brk, d.clauses.length) + buildSignatureBlock(d);
+  if (currentType === 'gpa') {
+    body1 = buildPreamble(d) + buildClausesRange(d, 0, d.clauses.length) + buildSignatureBlock(d);
+  } else {
+    const brk = clampBreak(d);
+    body1 = buildPreamble(d) + buildClausesRange(d, 0, brk);
+    body2 = buildClausesRange(d, brk, d.clauses.length) + buildSignatureBlock(d);
+    pageBreak = `<br clear="all" style="mso-special-character:line-break;page-break-before:always">`;
+  }
 
   const wordHTML = `
   <html xmlns:o='urn:schemas-microsoft-com:office:office'
@@ -886,7 +888,7 @@ function downloadWord(){
   <body>
     <div class="WordSection1">
       ${body1}
-      <br clear="all" style="mso-special-character:line-break;page-break-before:always">
+      ${pageBreak}
       ${body2}
     </div>
   </body>
