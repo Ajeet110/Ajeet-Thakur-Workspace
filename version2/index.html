@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Passport Photo Maker — A4 Sheet Generator</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    background:#eef1f7;color:#111827;-webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:13px 22px;background:#0f172a;color:#fff;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{font-size:26px;line-height:1}
+  .brand h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.2px}
+  .brand p{margin:2px 0 0;font-size:12px;color:#94a3b8}
+  .top-actions{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{border:0;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;
+       cursor:pointer;transition:.15s;font-family:inherit}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:#4f46e5;color:#fff}
+  .btn.primary:hover{background:#4338ca}
+  .btn.ghost{background:rgba(255,255,255,.12);color:#fff}
+  .btn.ghost:hover{background:rgba(255,255,255,.24)}
+  .btn.line{background:#fff;color:#334155;border:1px solid #dbe1ea;width:100%}
+  .btn.line:hover{border-color:#4f46e5;color:#4f46e5}
+
+  /* ---------- Layout ---------- */
+  .app{
+    display:grid;grid-template-columns:300px minmax(320px,1fr) 360px;
+    gap:16px;padding:16px;align-items:start;max-width:1720px;margin:0 auto;
+  }
+  @media (max-width:1250px){
+    .app{grid-template-columns:290px 1fr}
+    .right{grid-column:1/-1}
+    .pages{max-height:none!important;max-width:420px;margin:0 auto;width:100%}
+  }
+  @media (max-width:880px){ .app{grid-template-columns:1fr} }
+
+  .panel{
+    background:#fff;border-radius:16px;padding:16px;
+    box-shadow:0 1px 3px rgba(15,23,42,.07),0 10px 28px -16px rgba(15,23,42,.22);
+  }
+  @media (min-width:881px){
+    .left{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto}
+  }
+  .left::-webkit-scrollbar{width:7px}
+  .left::-webkit-scrollbar-thumb{background:#dbe1ea;border-radius:9px}
+
+  /* ---------- Form ---------- */
+  .group{padding:13px 0;border-bottom:1px solid #eef1f7}
+  .group:first-child{padding-top:0}
+  .group:last-child{border-bottom:0;padding-bottom:0}
+  .group h2{
+    font-size:11px;text-transform:uppercase;letter-spacing:.9px;
+    color:#64748b;margin:0 0 11px;font-weight:700;
+  }
+  .field{display:flex;flex-direction:column;gap:5px;margin-bottom:11px;
+         font-size:12px;color:#475569;font-weight:600}
+  .field:last-child{margin-bottom:0}
+  .field > span{display:flex;justify-content:space-between;align-items:center}
+  .field b{color:#4f46e5;font-weight:700}
+  input[type=number],select,input[type=color]{
+    width:100%;padding:8px 10px;border:1px solid #dbe1ea;border-radius:9px;
+    font-size:13px;font-family:inherit;color:#0f172a;background:#fff;outline:none;
+    transition:.15s;
+  }
+  input[type=number]:focus,select:focus{
+    border-color:#4f46e5;box-shadow:0 0 0 3px rgba(79,70,229,.13)
+  }
+  input[type=color]{padding:3px;height:38px;cursor:pointer}
+  input[type=range]{width:100%;accent-color:#4f46e5;cursor:pointer;margin:0}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .check{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#475569;
+         font-weight:600;cursor:pointer;margin-top:4px}
+  .check input{accent-color:#4f46e5;width:15px;height:15px;cursor:pointer}
+
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .chips button{
+    border:1px solid #dbe1ea;background:#fff;border-radius:999px;padding:5px 13px;
+    font-size:12px;font-weight:600;color:#475569;cursor:pointer;font-family:inherit;
+    transition:.15s;
+  }
+  .chips button:hover{border-color:#4f46e5;color:#4f46e5}
+  .chips button.active{background:#4f46e5;border-color:#4f46e5;color:#fff}
+
+  /* ---------- Drop zone ---------- */
+  .drop{
+    border:2px dashed #cbd5e1;border-radius:14px;padding:20px 12px;text-align:center;
+    cursor:pointer;transition:.15s;background:#f8fafc;
+  }
+  .drop:hover,.drop.over{border-color:#4f46e5;background:#eef2ff}
+  .drop-ico{font-size:26px;line-height:1}
+  .drop p{margin:7px 0 2px;font-size:13px;color:#334155}
+  .drop p strong{color:#4f46e5}
+  .drop small{color:#94a3b8;font-size:11px}
+
+  /* ---------- Editor stage ---------- */
+  .mid-head{display:flex;align-items:center;justify-content:space-between;
+            gap:10px;margin-bottom:12px}
+  .mid-head h2{font-size:14px;margin:0;font-weight:700;color:#0f172a}
+  .pill{
+    font-size:11px;font-weight:700;color:#4f46e5;background:#eef2ff;
+    border-radius:999px;padding:5px 11px;white-space:nowrap;
+  }
+  .stage{
+    position:relative;display:flex;align-items:center;justify-content:center;
+    background:#f8fafc;border:1px dashed #cbd5e1;border-radius:12px;
+    padding:18px;min-height:440px;
+  }
+  #editor{
+    max-width:100%;max-height:62vh;display:block;background:#fff;
+    box-shadow:0 8px 26px rgba(15,23,42,.20);border-radius:3px;
+    cursor:grab;touch-action:none;user-select:none;
+  }
+  #editor:active{cursor:grabbing}
+  #placeholder{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:#94a3b8;font-size:13px;font-weight:600;pointer-events:none;text-align:center;
+    padding:20px;
+  }
+  .hint{text-align:center;font-size:11.5px;color:#94a3b8;margin:12px 0 0}
+
+  /* ---------- A4 pages ---------- */
+  .pages{display:flex;flex-direction:column;gap:16px;
+         max-height:calc(100vh - 160px);overflow-y:auto;padding-right:4px}
+  .pages::-webkit-scrollbar{width:7px}
+  .pages::-webkit-scrollbar-thumb{background:#dbe1ea;border-radius:9px}
+  .page{
+    position:relative;width:100%;aspect-ratio:210/297;background:#fff;
+    border:1px solid #e2e8f0;border-radius:2px;flex:0 0 auto;
+    box-shadow:0 5px 18px rgba(15,23,42,.11);
+  }
+  .tile{position:absolute;overflow:hidden;background:#f1f5f9}
+  .tile.guide{outline:1px dashed rgba(15,23,42,.42);outline-offset:-1px}
+  .tile img{width:100%;height:100%;object-fit:fill;display:block}
+  .empty{
+    text-align:center;color:#94a3b8;font-size:13px;padding:60px 16px;
+    border:2px dashed #dbe1ea;border-radius:14px;line-height:1.6;
+  }
+
+  /* ---------- Print ---------- */
+  #printArea{display:none}
+  @media print{
+    @page{size:A4;margin:0}
+    html,body{background:#fff!important;margin:0!important;padding:0!important}
+    body > *:not(#printArea){display:none!important}
+    #printArea{display:block!important}
+    .print-page{
+      position:relative;width:210mm;height:297mm;overflow:hidden;
+      page-break-after:always;break-after:page;
+    }
+    .print-page:last-child{page-break-after:auto;break-after:auto}
+    .print-page img{position:absolute;display:block}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= TOP BAR ================= -->
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">🪪</span>
+    <div>
+      <h1>Passport Photo Maker</h1>
+      <p>Upload · Edit · Print on A4 · Export to Word</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button id="btnWord"  class="btn ghost">⬇ Download Word</button>
+    <button id="btnPrint" class="btn primary">🖨 Print / Save PDF</button>
+  </div>
+</header>
+
+<!-- ================= APP ================= -->
+<div class="app">
+
+  <!-- ---------- LEFT : CONTROLS ---------- -->
+  <aside class="panel left">
+
+    <section class="group">
+      <h2>1 · Upload photo</h2>
+      <div id="drop" class="drop">
+        <input type="file" id="file" accept="image/*" hidden />
+        <div class="drop-ico">📷</div>
+        <p><strong>Click to choose</strong> or drag &amp; drop</p>
+        <small>JPG · PNG · WEBP</small>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>2 · Photo size</h2>
+      <label class="field">
+        <span>Preset</span>
+        <select id="preset">
+          <option value="35x45" selected>Passport — 35 × 45 mm (IN / UK / EU)</option>
+          <option value="51x51">US Passport — 51 × 51 mm (2 × 2 in)</option>
+          <option value="35x35">Square — 35 × 35 mm</option>
+          <option value="33x48">China Visa — 33 × 48 mm</option>
+          <option value="45x45">Japan Visa — 45 × 45 mm</option>
+          <option value="50x70">ID Card — 50 × 70 mm</option>
+          <option value="25x35">Stamp size — 25 × 35 mm</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </label>
+      <div class="row">
+        <label class="field"><span>Width (mm)</span>
+          <input type="number" id="wMM" value="35" min="10" max="150" step="0.5" />
+        </label>
+        <label class="field"><span>Height (mm)</span>
+          <input type="number" id="hMM" value="45" min="10" max="150" step="0.5" />
+        </label>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>3 · Copies &amp; sheet</h2>
+      <label class="field"><span>Number of photos</span>
+        <input type="number" id="copies" value="4" min="1" max="200" />
+      </label>
+      <div class="chips" id="copyChips">
+        <button data-copies="4" class="active">4</button>
+        <button data-copies="6">6</button>
+        <button data-copies="8">8</button>
+        <button data-copies="12">12</button>
+        <button data-copies="20">20</button>
+        <button data-copies="30">30</button>
+      </div>
+      <div class="row">
+        <label class="field"><span>Gap (mm)</span>
+          <input type="number" id="gap" value="3" min="0" max="20" step="0.5" />
+        </label>
+        <label class="field"><span>Margin (mm)</span>
+          <input type="number" id="margin" value="10" min="0" max="40" step="1" />
+        </label>
+      </div>
+      <label class="check"><input type="checkbox" id="guides" checked /> Show cut guides</label>
+    </section>
+
+    <section class="group">
+      <h2>4 · Edit photo</h2>
+      <label class="field"><span>Zoom <b id="zoomVal">100%</b></span>
+        <input type="range" id="zoom" min="0.4" max="4" step="0.01" value="1" />
+      </label>
+      <label class="field"><span>Rotate <b id="rotVal">0°</b></span>
+        <input type="range" id="rot" min="-180" max="180" step="1" value="0" />
+      </label>
+      <label class="field"><span>Brightness <b id="briVal">100%</b></span>
+        <input type="range" id="bri" min="40" max="160" step="1" value="100" />
+      </label>
+      <label class="field"><span>Contrast <b id="conVal">100%</b></span>
+        <input type="range" id="con" min="40" max="160" step="1" value="100" />
+      </label>
+      <label class="field"><span>Saturation <b id="satVal">100%</b></span>
+        <input type="range" id="sat" min="0" max="200" step="1" value="100" />
+      </label>
+      <label class="field"><span>Background</span>
+        <input type="color" id="bg" value="#ffffff" />
+      </label>
+      <button id="btnReset" class="btn line">↺ Reset edits</button>
+    </section>
+
+  </aside>
+
+  <!-- ---------- MIDDLE : EDITOR ---------- -->
+  <main class="panel mid">
+    <div class="mid-head">
+      <h2>Editor</h2>
+      <span id="sizeLabel" class="pill">35 × 45 mm</span>
+    </div>
+    <div class="stage">
+      <canvas id="editor"></canvas>
+      <div id="placeholder">No photo yet — upload one to start</div>
+    </div>
+    <p class="hint">Drag the photo to reposition &nbsp;·&nbsp; Scroll to zoom</p>
+  </main>
+
+  <!-- ---------- RIGHT : LIVE PREVIEW ---------- -->
+  <aside class="panel right">
+    <div class="mid-head">
+      <h2>A4 Preview</h2>
+      <span id="stats" class="pill">—</span>
+    </div>
+    <div id="pages" class="pages"></div>
+  </aside>
+
+</div>
+
+<!-- Print-only container -->
+<div id="printArea"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =========================================================
+     STATE
+     ========================================================= */
+  const state = {
+    img: null,
+    zoom: 1,
+    rot: 0,
+    panX: 0,
+    panY: 0,
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+    bg: "#ffffff",
+    widthMM: 35,
+    heightMM: 45,
+    copies: 4,
+    gapMM: 3,
+    marginMM: 10,
+    guides: true
+  };
+
+  const DPI  = 300;
+  const A4W  = 210;   // mm
+  const A4H  = 297;   // mm
+  const $    = (s) => document.querySelector(s);
+
+  const canvas = $("#editor");
+  const ctx    = canvas.getContext("2d");
+
+  let photoBlobURL = null;
+  let blobToken    = 0;
+  let previewTimer = null;
+  let drawPending  = false;
+
+  /* =========================================================
+     HELPERS
+     ========================================================= */
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  function photoPixels() {
+    let w = Math.round((state.widthMM  / 25.4) * DPI);
+    let h = Math.round((state.heightMM / 25.4) * DPI);
+    const cap = 2200;
+    const k = Math.min(1, cap / Math.max(w, h));
+    return { w: Math.max(1, Math.round(w * k)), h: Math.max(1, Math.round(h * k)) };
+  }
+
+  /* Compute the A4 grid layout */
+  function computeLayout() {
+    const m  = state.marginMM;
+    const w  = state.widthMM;
+    const h  = state.heightMM;
+    const g  = state.gapMM;
+
+    const usableW = Math.max(1, A4W - 2 * m);
+    const usableH = Math.max(1, A4H - 2 * m);
+
+    const cols = Math.max(1, Math.floor((usableW + g) / (w + g)));
+    const rows = Math.max(1, Math.floor((usableH + g) / (h + g)));
+    const perPage = cols * rows;
+    const pages   = Math.max(1, Math.ceil(state.copies / perPage));
+
+    const gridW = cols * w + (cols - 1) * g;
+    const startX = (A4W - gridW) / 2;   // centred horizontally
+    const startY = m;                   // top aligned
+
+    return { cols, rows, perPage, pages, startX, startY };
+  }
+
+  /* =========================================================
+     RENDER THE PHOTO ONTO THE EDITOR CANVAS
+     ========================================================= */
+  function draw() {
+    const { w: pw, h: ph } = photoPixels();
+
+    if (canvas.width !== pw || canvas.height !== ph) {
+      canvas.width  = pw;
+      canvas.height = ph;
+    }
+
+    ctx.save();
+    ctx.fillStyle = state.bg;
+    ctx.fillRect(0, 0, pw, ph);
+
+    if (state.img) {
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.filter = "brightness(" + state.brightness + "%) contrast(" +
+                   state.contrast + "%) saturate(" + state.saturation + "%)";
+
+      ctx.translate(pw / 2 + state.panX, ph / 2 + state.panY);
+      ctx.rotate((state.rot * Math.PI) / 180);
+
+      const nw = state.img.naturalWidth;
+      const nh = state.img.naturalHeight;
+      const base = Math.max(pw / nw, ph / nh);   // "cover"
+      const s = base * state.zoom;
+
+      ctx.drawImage(state.img, (-nw * s) / 2, (-nh * s) / 2, nw * s, nh * s);
+    }
+    ctx.restore();
+    ctx.filter = "none";
+
+    schedulePreview();
+  }
+
+  function scheduleDraw() {
+    if (drawPending) return;
+    drawPending = true;
+    requestAnimationFrame(function () {
+      drawPending = false;
+      draw();
+    });
+  }
+
+  /* Debounced: snapshot the canvas → blob URL → redraw the A4 preview */
+  function schedulePreview() {
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(refreshPhoto, 70);
+  }
+
+  function refreshPhoto() {
+    const token = ++blobToken;
+    canvas.toBlob(function (blob) {
+      if (!blob || token !== blobToken) return;
+      if (photoBlobURL) URL.revokeObjectURL(photoBlobURL);
+      photoBlobURL = URL.createObjectURL(blob);
+      renderPreview();
+    }, "image/jpeg", 0.92);
+  }
+
+  /* =========================================================
+     LIVE A4 PREVIEW (right panel)
+     ========================================================= */
+  function renderPreview() {
+    const host = $("#pages");
+    const L = computeLayout();
+
+    if (!state.img || !photoBlobURL) {
+      host.innerHTML =
+        '<div class="empty">Upload a photo to see the<br>live A4 sheet preview</div>';
+      updateStats(L);
+      return;
+    }
+
+    host.innerHTML = "";
+
+    for (let p = 0; p < L.pages; p++) {
+      const page = document.createElement("div");
+      page.className = "page";
+
+      for (let i = 0; i < L.perPage; i++) {
+        const idx = p * L.perPage + i;
+        if (idx >= state.copies) break;
+
+        const col = i % L.cols;
+        const row = Math.floor(i / L.cols);
+
+        const x = L.startX + col * (state.widthMM + state.gapMM);
+        const y = L.startY + row * (state.heightMM + state.gapMM);
+
+        const tile = document.createElement("div");
+        tile.className = "tile" + (state.guides ? " guide" : "");
+        tile.style.left   = (x / A4W * 100) + "%";
+        tile.style.top    = (y / A4H * 100) + "%";
+        tile.style.width  = (state.widthMM  / A4W * 100) + "%";
+        tile.style.height = (state.heightMM / A4H * 100) + "%";
+
+        const img = document.createElement("img");
+        img.src = photoBlobURL;
+        img.alt = "passport photo";
+        tile.appendChild(img);
+
+        page.appendChild(tile);
+      }
+      host.appendChild(page);
+    }
+
+    updateStats(L);
+  }
+
+  function updateStats(L) {
+    if (!L) L = computeLayout();
+    const el = $("#stats");
+    if (!state.img) { el.textContent = "—"; return; }
+    el.textContent =
+      state.copies + " photo" + (state.copies > 1 ? "s" : "") +
+      " · " + L.pages + " page" + (L.pages > 1 ? "s" : "") +
+      " · " + L.cols + "×" + L.rows;
+  }
+
+  /* =========================================================
+     FILE LOADING
+     ========================================================= */
+  function loadFile(file) {
+    if (!file || !file.type.startsWith("image/")) {
+      alert("Please choose an image file (JPG, PNG, WEBP).");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function () {
+      const img = new Image();
+      img.onload = function () {
+        state.img  = img;
+        state.zoom = 1;
+        state.rot  = 0;
+        state.panX = 0;
+        state.panY = 0;
+
+        // reset adjustment sliders
+        setRange("#zoom", 1);   $("#zoomVal").textContent = "100%";
+        setRange("#rot", 0);    $("#rotVal").textContent  = "0°";
+        setRange("#bri", 100);  $("#briVal").textContent  = "100%";
+        setRange("#con", 100);  $("#conVal").textContent  = "100%";
+        setRange("#sat", 100);  $("#satVal").textContent  = "100%";
+
+        $("#placeholder").style.display = "none";
+        draw();
+      };
+      img.onerror = function () { alert("Could not read that image."); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function setRange(sel, val) { $(sel).value = val; }
+
+  /* =========================================================
+     PRINT
+     ========================================================= */
+  function buildPrintArea() {
+    const area = $("#printArea");
+    area.innerHTML = "";
+    if (!photoBlobURL) return;
+
+    const L = computeLayout();
+
+    for (let p = 0; p < L.pages; p++) {
+      const page = document.createElement("div");
+      page.className = "print-page";
+
+      for (let i = 0; i < L.perPage; i++) {
+        const idx = p * L.perPage + i;
+        if (idx >= state.copies) break;
+
+        const col = i % L.cols;
+        const row = Math.floor(i / L.cols);
+
+        const x = L.startX + col * (state.widthMM + state.gapMM);
+        const y = L.startY + row * (state.heightMM + state.gapMM);
+
+        const img = document.createElement("img");
+        img.src = photoBlobURL;
+        img.style.left   = x + "mm";
+        img.style.top    = y + "mm";
+        img.style.width  = state.widthMM  + "mm";
+        img.style.height = state.heightMM + "mm";
+        if (state.guides) {
+          img.style.outline = "0.2mm dashed rgba(0,0,0,.45)";
+          img.style.outlineOffset = "-0.2mm";
+        }
+        page.appendChild(img);
+      }
+      area.appendChild(page);
+    }
+  }
+
+  function doPrint() {
+    if (!state.img) { alert("Please upload a photo first."); return; }
+    refreshPhotoNow();
+    buildPrintArea();
+    setTimeout(function () { window.print(); }, 120);
+  }
+
+  /* Force a synchronous snapshot before printing / exporting */
+  function refreshPhotoNow() {
+    clearTimeout(previewTimer);
+    const url = canvas.toDataURL("image/jpeg", 0.92);
+    const blob = dataURLtoBlob(url);
+    if (photoBlobURL) URL.revokeObjectURL(photoBlobURL);
+    photoBlobURL = URL.createObjectURL(blob);
+    renderPreview();
+  }
+
+  function dataURLtoBlob(dataURL) {
+    const parts = dataURL.split(",");
+    const mime  = parts[0].match(/:(.*?);/)[1];
+    const bin   = atob(parts[1]);
+    const len   = bin.length;
+    const buf   = new Uint8Array(len);
+    for (let i = 0; i < len; i++) buf[i] = bin.charCodeAt(i);
+    return new Blob([buf], { type: mime });
+  }
+
+  /* =========================================================
+     WORD EXPORT  (.doc via MHTML — images embedded)
+     ========================================================= */
+  function downloadWord() {
+    if (!state.img) { alert("Please upload a photo first."); return; }
+
+    const dataURL = canvas.toDataURL("image/jpeg", 0.92);
+    const base64  = dataURL.split(",")[1];
+    const wrapped = base64.replace(/(.{76})/g, "$1\r\n");
+
+    const L = computeLayout();
+    const mm2pt = (mm) => (mm * 2.83465).toFixed(1) + "pt";
+
+    const imgW  = mm2pt(state.widthMM);
+    const imgH  = mm2pt(state.heightMM);
+    const halfGap = mm2pt(state.gapMM / 2);
+    const topPad  = mm2pt(state.marginMM);
+
+    let body = "";
+
+    for (let p = 0; p < L.pages; p++) {
+      if (p > 0) {
+        body += '<br clear="all" style="mso-special-character:line-break;' +
+                'page-break-before:always">';
+      }
+      body += '<p style="margin:0;font-size:1pt;line-height:' + topPad +
+              '">&nbsp;</p>';
+      body += '<table align="center" cellspacing="0" cellpadding="0" ' +
+              'style="border-collapse:collapse;">';
+
+      for (let r = 0; r < L.rows; r++) {
+        body += "<tr>";
+        for (let c = 0; c < L.cols; c++) {
+          const idx = p * L.perPage + r * L.cols + c;
+          if (idx >= state.copies) {
+            body += "<td></td>";
+            continue;
+          }
+          body += '<td style="padding:' + halfGap + ';">' +
+                  '<img src="file:///C:/photo.jpg" ' +
+                  'style="width:' + imgW + ';height:' + imgH + ';display:block;">' +
+                  "</td>";
+        }
+        body += "</tr>";
+      }
+      body += "</table>";
+    }
+
+    const html =
+      '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+      'xmlns:w="urn:schemas-microsoft-com:office:word" ' +
+      'xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8">' +
+      "<title>Passport Photos</title>" +
+      "<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View>" +
+      "<w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->" +
+      "<style>@page{size:21cm 29.7cm;margin:0cm;}" +
+      "body{font-family:Arial,sans-serif;margin:0;}" +
+      "table{border-collapse:collapse;}td{padding:0;}</style>" +
+      "</head><body>" + body + "</body></html>";
+
+    const B = "----=_NextPart_PassportPhoto";
+
+    const mhtml = [
+      "MIME-Version: 1.0",
+      'Content-Type: multipart/related; boundary="' + B + '"; type="text/html"',
+      "",
+      "--" + B,
+      "Content-Location: file:///C:/doc.htm",
+      "Content-Type: text/html; charset=\"utf-8\"",
+      "",
+      html,
+      "",
+      "--" + B,
+      "Content-Location: file:///C:/photo.jpg",
+      "Content-Type: image/jpeg",
+      "Content-Transfer-Encoding: base64",
+      "",
+      wrapped,
+      "",
+      "--" + B + "--",
+      ""
+    ].join("\r\n");
+
+    const blob = new Blob([mhtml], { type: "application/msword" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "passport-photos.doc";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+  }
+
+  /* =========================================================
+     DRAG & ZOOM ON THE EDITOR
+     ========================================================= */
+  let dragging = false;
+  let lastX = 0, lastY = 0;
+
+  canvas.addEventListener("pointerdown", function (e) {
+    if (!state.img) return;
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    canvas.setPointerCapture(e.pointerId);
+  });
+
+  canvas.addEventListener("pointermove", function (e) {
+    if (!dragging || !state.img) return;
+    const rect = canvas.getBoundingClientRect();
+    const f = canvas.width / rect.width;      // css px → canvas px
+    state.panX += (e.clientX - lastX) * f;
+    state.panY += (e.clientY - lastY) * f;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    scheduleDraw();
+  });
+
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    try { canvas.releasePointerCapture(e.pointerId); } catch (_) {}
+  }
+  canvas.addEventListener("pointerup", endDrag);
+  canvas.addEventListener("pointercancel", endDrag);
+
+  canvas.addEventListener("wheel", function (e) {
+    if (!state.img) return;
+    e.preventDefault();
+    const factor = Math.exp(-e.deltaY * 0.0015);
+    state.zoom = clamp(state.zoom * factor, 0.4, 4);
+    $("#zoom").value = state.zoom;
+    $("#zoomVal").textContent = Math.round(state.zoom * 100) + "%";
+    scheduleDraw();
+  }, { passive: false });
+
+  /* =========================================================
+     UI WIRING
+     ========================================================= */
+  // ---- upload ----
+  const fileInput = $("#file");
+  const drop = $("#drop");
+
+  drop.addEventListener("click", function () { fileInput.click(); });
+  fileInput.addEventListener("change", function (e) {
+    if (e.target.files && e.target.files[0]) loadFile(e.target.files[0]);
+    fileInput.value = "";
+  });
+
+  ["dragenter", "dragover"].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) {
+      e.preventDefault();
+      drop.classList.add("over");
+    });
+  });
+  ["dragleave", "drop"].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) {
+      e.preventDefault();
+      drop.classList.remove("over");
+    });
+  });
+  drop.addEventListener("drop", function (e) {
+    const f = e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) loadFile(f);
+  });
+
+  // ---- size preset ----
+  $("#preset").addEventListener("change", function () {
+    if (this.value === "custom") return;
+    const parts = this.value.split("x");
+    state.widthMM  = parseFloat(parts[0]);
+    state.heightMM = parseFloat(parts[1]);
+    $("#wMM").value = state.widthMM;
+    $("#hMM").value = state.heightMM;
+    syncSize();
+  });
+
+  function onSizeInput() {
+    state.widthMM  = clamp(parseFloat($("#wMM").value) || 35, 10, 150);
+    state.heightMM = clamp(parseFloat($("#hMM").value) || 45, 10, 150);
+    $("#preset").value = "custom";
+    syncSize();
+  }
+  $("#wMM").addEventListener("input", onSizeInput);
+  $("#hMM").addEventListener("input", onSizeInput);
+
+  function syncSize() {
+    $("#sizeLabel").textContent = state.widthMM + " × " + state.heightMM + " mm";
+    // keep the framing sensible when the aspect ratio changes
+    scheduleDraw();
+  }
+
+  // ---- copies ----
+  $("#copies").addEventListener("input", function () {
+    state.copies = clamp(parseInt(this.value, 10) || 1, 1, 200);
+    document.querySelectorAll("#copyChips button").forEach(function (b) {
+      b.classList.toggle("active", +b.dataset.copies === state.copies);
+    });
+    renderPreview();
+  });
+
+  $("#copyChips").addEventListener("click", function (e) {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    state.copies = +btn.dataset.copies;
+    $("#copies").value = state.copies;
+    document.querySelectorAll("#copyChips button").forEach(function (b) {
+      b.classList.toggle("active", b === btn);
+    });
+    renderPreview();
+  });
+
+  // ---- gap / margin / guides ----
+  $("#gap").addEventListener("input", function () {
+    state.gapMM = clamp(parseFloat(this.value) || 0, 0, 20);
+    renderPreview();
+  });
+  $("#margin").addEventListener("input", function () {
+    state.marginMM = clamp(parseFloat(this.value) || 0, 0, 40);
+    renderPreview();
+  });
+  $("#guides").addEventListener("change", function () {
+    state.guides = this.checked;
+    renderPreview();
+  });
+
+  // ---- edit sliders ----
+  $("#zoom").addEventListener("input", function () {
+    state.zoom = parseFloat(this.value);
+    $("#zoomVal").textContent = Math.round(state.zoom * 100) + "%";
+    scheduleDraw();
+  });
+  $("#rot").addEventListener("input", function () {
+    state.rot = parseFloat(this.value);
+    $("#rotVal").textContent = state.rot + "°";
+    scheduleDraw();
+  });
+  $("#bri").addEventListener("input", function () {
+    state.brightness = parseFloat(this.value);
+    $("#briVal").textContent = state.brightness + "%";
+    scheduleDraw();
+  });
+  $("#con").addEventListener("input", function () {
+    state.contrast = parseFloat(this.value);
+    $("#conVal").textContent = state.contrast + "%";
+    scheduleDraw();
+  });
+  $("#sat").addEventListener("input", function () {
+    state.saturation = parseFloat(this.value);
+    $("#satVal").textContent = state.saturation + "%";
+    scheduleDraw();
+  });
+  $("#bg").addEventListener("input", function () {
+    state.bg = this.value;
+    scheduleDraw();
+  });
+
+  $("#btnReset").addEventListener("click", function () {
+    state.zoom = 1;  state.rot = 0;
+    state.panX = 0;  state.panY = 0;
+    state.brightness = 100;
+    state.contrast   = 100;
+    state.saturation = 100;
+    state.bg = "#ffffff";
+
+    setRange("#zoom", 1);  $("#zoomVal").textContent = "100%";
+    setRange("#rot", 0);   $("#rotVal").textContent  = "0°";
+    setRange("#bri", 100); $("#briVal").textContent  = "100%";
+    setRange("#con", 100); $("#conVal").textContent  = "100%";
+    setRange("#sat", 100); $("#satVal").textContent  = "100%";
+    $("#bg").value = "#ffffff";
+
+    scheduleDraw();
+  });
+
+  // ---- actions ----
+  $("#btnPrint").addEventListener("click", doPrint);
+  $("#btnWord").addEventListener("click", downloadWord);
+
+  /* =========================================================
+     INIT
+     ========================================================= */
+  syncSize();
+  draw();
+  renderPreview();
+
+})();
+</script>
+</body>
+</html>
