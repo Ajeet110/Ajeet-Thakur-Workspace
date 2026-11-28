@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Resume Maker - 40 Templates</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Playfair+Display:wght@400;700&family=Oswald:wght@400;600&family=Lato:wght@400;700&family=Montserrat:wght@400;600;800&family=Times+New+Roman&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === GLOBAL STYLES === */
+        :root {
+            --primary: #3b5bf5;
+            --primary-hover: #2a46d9;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
+        button { cursor: pointer; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; transition: 0.2s; }
+        .btn-primary { background-color: var(--primary); color: white; padding: 12px 24px; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-outline { background-color: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 10px 20px; }
+        .btn-outline:hover { background-color: var(--primary); color: white; }
+        .hidden { display: none !important; }
+
+        /* === PAGE 1: LANDING === */
+        #page1 { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; background: linear-gradient(135deg, #ffffff 0%, #eef2ff 100%); text-align: center;}
+        .logo { font-size: 28px; font-weight: 800; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #1a1a1a;}
+        .hero-title { font-size: 48px; font-weight: 800; margin-bottom: 15px; color: #0f172a;}
+        .hero-subtitle { font-size: 18px; color: var(--text-gray); margin-bottom: 40px; max-width: 600px;}
+
+        /* === PAGE 2: TEMPLATES & FILTERS === */
+        #page2 { min-height: 100vh; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+        .header-section { text-align: center; margin-bottom: 30px; }
+        
+        .filter-bar { background: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); display: flex; gap: 15px; align-items: center; margin-bottom: 40px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 1300px; border: 1px solid var(--border); position: sticky; top: 10px; z-index: 100;}
+        .filter-group { display: flex; align-items: center; gap: 8px; }
+        .filter-group label { font-weight: 600; color: var(--text-dark); font-size: 14px; }
+        .filter-group select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; cursor: pointer; background: #fff; font-weight: 500; color: #333;}
+        
+        .color-swatches { display: flex; gap: 8px; margin-left: 5px; }
+        .color-swatch { width: 26px; height: 26px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
+        .color-swatch:hover, .color-swatch.active { border-color: var(--text-dark); transform: scale(1.1); }
+
+        .templates-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1300px; width: 100%; }
+        .template-card { background: white; border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 2px solid transparent; transition: 0.3s; display: flex; flex-direction: column; position: relative; cursor: pointer; }
+        .template-card:hover { border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1);}
+
+        /* Perfect Scaled Mini Previews */
+        .mini-resume { width: 100%; height: 320px; background: white; border: 1px solid #f1f5f9; margin-bottom: 15px; overflow: hidden; position: relative; pointer-events: none; }
+        .mini-resume .scale-wrapper { 
+            width: 794px; 
+            height: 1123px; 
+            transform: scale(0.33); 
+            transform-origin: top left; 
+            position: absolute; 
+            top: 0; left: 0;
+        }
+
+        /* === PAGE 3: BUILDER === */
+        #page3 { display: flex; height: 100vh; overflow: hidden; }
+        .form-section { width: 40%; padding: 30px; overflow-y: auto; background: white; box-shadow: 4px 0 15px rgba(0,0,0,0.05); z-index: 10; }
+        .preview-section { width: 60%; background: #e2e8f0; padding: 40px; overflow-y: auto; display: flex; justify-content: center; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #334155;}
+        .form-group input, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: inherit; background: #f8fafc;}
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(59, 91, 245, 0.1); }
+
+        .dynamic-item { border: 1px dashed #cbd5e1; padding: 12px; border-radius: 8px; margin-bottom: 12px; position: relative; background: #f8fafc; }
+        .remove-btn { position: absolute; top: 10px; right: 10px; background: #fee2e2; color: #ef4444; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer;}
+        .remove-btn:hover { background: #ef4444; color: white;}
+        .add-btn { background: #eff6ff; color: #3b82f6; border: 1px dashed #93c5fd; width: 100%; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; cursor: pointer;}
+        .add-btn:hover { background: #dbeafe; }
+        
+        .bottom-actions { display: flex; gap: 10px; margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+
+        /* === RESUME PREVIEW CANVAS (Dynamic Layouts) === */
+        .resume-page {
+            width: 100%; max-width: 794px; min-height: 1123px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.15); padding: 0; transition: all 0.3s; font-size: 13px; color: #333; line-height: 1.5; 
+            --font-main: 'Roboto', sans-serif; --theme: #1e3a8a;
+            font-family: var(--font-main);
+        }
+
+        .resume-page h1, .resume-page h2, .resume-page h3, .resume-page h4 { font-family: var(--font-main); }
+        .section-title { font-weight: 700; font-size: 14px; text-transform: uppercase; margin: 15px 0 8px 0; color: var(--theme); border-bottom: 2px solid var(--theme); padding-bottom: 4px;}
+        .item-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 13.5px; }
+        .item-sub { color: #555; font-style: italic; font-size: 12px; margin-bottom: 4px; }
+        ul { padding-left: 18px; margin-top: 4px; font-size: 12.5px; }
+
+        /* Layout Classes */
+        .layout-left-sidebar { display: grid; grid-template-columns: 240px 1fr; min-height: 1123px; }
+        .layout-left-sidebar .sidebar { background: var(--theme); color: white; padding: 40px 25px; }
+        .layout-left-sidebar .sidebar .section-title { color: white; border-bottom: 1px solid rgba(255,255,255,0.3); }
+        .layout-left-sidebar .sidebar p, .layout-left-sidebar .sidebar li { color: #f1f5f9; }
+        .layout-left-sidebar .main-content { padding: 40px; }
+        .layout-left-sidebar .header h1 { font-size: 32px; color: var(--theme); margin-bottom: 5px; }
+
+        .layout-right-sidebar { display: grid; grid-template-columns: 1fr 240px; min-height: 1123px; }
+        .layout-right-sidebar .right-sidebar { background: #f8fafc; border-left: 4px solid var(--theme); padding: 40px 25px; }
+        .layout-right-sidebar .main-content { padding: 40px; }
+        .layout-right-sidebar .header h1 { font-size: 32px; color: var(--theme); margin-bottom: 5px; }
+
+        .layout-top-banner { padding: 0; }
+        .layout-top-banner .header-bg { background: var(--theme); color: white; padding: 40px; text-align: center; }
+        .layout-top-banner .header-bg h1 { font-size: 36px; margin-bottom: 5px; letter-spacing: 1px;}
+        .layout-top-banner .header-bg p { font-size: 14px; opacity: 0.9;}
+        .layout-top-banner .body-content { padding: 40px; display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+
+        .layout-minimal { padding: 50px; }
+        .layout-minimal .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--theme); padding-bottom: 20px;}
+        .layout-minimal .header h1 { font-size: 34px; color: #111; margin-bottom: 5px; }
+        .layout-minimal .section-title { text-align: center; border-bottom: 1px solid #ccc; color: #333;}
+
+        .layout-timeline { padding: 40px; }
+        .layout-timeline .header { text-align: center; margin-bottom: 30px; }
+        .layout-timeline .header h1 { font-size: 34px; color: var(--theme); }
+        .layout-timeline .timeline-container { border-left: 2px solid var(--theme); padding-left: 20px; margin-left: 10px; }
+        .layout-timeline .timeline-item { position: relative; margin-bottom: 20px; }
+        .layout-timeline .timeline-item::before { content: ''; position: absolute; left: -27px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: white; border: 2px solid var(--theme); }
+
+        .layout-ats-strict { padding: 50px; font-family: 'Times New Roman', Times, serif; }
+        .layout-ats-strict .header { text-align: center; margin-bottom: 20px; }
+        .layout-ats-strict .header h1 { font-size: 28px; text-transform: uppercase; margin-bottom: 5px; }
+        .layout-ats-strict .section-title { text-align: left; border-bottom: 1px solid #000; color: #000; font-size: 14px; }
+
+        .layout-two-col-clean { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 50px; }
+        .layout-two-col-clean .header { grid-column: 1 / -1; text-align: center; border-bottom: 2px solid var(--theme); padding-bottom: 15px; margin-bottom: 20px;}
+        .layout-two-col-clean .header h1 { font-size: 32px; color: var(--theme); }
+
+        /* Photo styling */
+        .profile-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 15px;}
+        .layout-top-banner .profile-photo { border-color: var(--theme); width: 110px; height: 110px; border-radius: 10px;}
+        .layout-minimal .profile-photo { margin: 0 auto 15px auto; display: block; width: 110px; height: 110px;}
+        .layout-timeline .profile-photo { margin: 0 auto 15px auto; display: block; }
+
+        /* === PRINT STYLES === */
+        @media print {
+            body { background: white; }
+            #page1, #page2, .form-section, .preview-section { padding: 0; background: transparent; overflow: visible; }
+            #page3 { display: block; height: auto; overflow: visible; }
+            .form-section, .bottom-actions { display: none !important; }
+            .preview-section { width: 100%; display: block; padding: 0;}
+            .resume-page { box-shadow: none; width: 100%; max-width: 100%; padding: 0; margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= PAGE 1: LANDING ================= -->
+    <div id="page1">
+        <div class="logo"><i class="fa-regular fa-file-lines"></i> Resume Now.</div>
+        <h1 class="hero-title">Create a professional resume in minutes</h1>
+        <p class="hero-subtitle">Choose from 40 unique templates ranging from ATS-strict to modern creative layouts.</p>
+        <button class="btn-primary" style="padding: 15px 40px; font-size: 18px;" onclick="showPage(2)">Browse Templates</button>
+    </div>
+
+    <!-- ================= PAGE 2: TEMPLATES & FILTERS ================= -->
+    <div id="page2" class="hidden">
+        <div class="header-section">
+            <h2>Templates we recommend for you</h2>
+            <p style="color: var(--text-gray); margin-top: 5px;">All templates are ATS-friendly and fully customizable.</p>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label>Filter by:</label>
+                <select id="filter-photo" onchange="renderTemplates()">
+                    <option value="all">Photo (All)</option>
+                    <option value="true">With Photo</option>
+                    <option value="false">Without Photo</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <select id="filter-cols" onchange="renderTemplates()">
+                    <option value="all">Columns (All)</option>
+                    <option value="1">1 Column</option>
+                    <option value="2">2 Columns</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Theme Color:</label>
+                <div class="color-swatches" id="color-picker"></div>
+            </div>
+        </div>
+
+        <div class="templates-grid" id="templates-grid"></div>
+        
+        <button class="btn-outline" style="margin-top: 40px;" onclick="showPage(1)">Back</button>
+    </div>
+
+    <!-- ================= PAGE 3: BUILDER & PREVIEW ================= -->
+    <div id="page3" class="hidden">
+        
+        <div class="form-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button class="btn-outline" style="padding: 6px 12px; font-size: 13px;" onclick="showPage(2)"><i class="fa-solid fa-arrow-left"></i> Change Template</button>
+                <button class="btn-outline" style="padding: 6px 12px; font-size: 13px; border-color: #ef4444; color: #ef4444;" onclick="clearData()"><i class="fa-solid fa-trash"></i> Clear</button>
+            </div>
+            
+            <h2 style="margin-bottom: 15px; font-size: 18px;">Edit Details</h2>
+            
+            <div class="form-group hidden" id="photo-upload-group">
+                <label style="color: var(--primary);"><i class="fa-solid fa-camera"></i> Upload Profile Photo</label>
+                <input type="file" id="input-photo" accept="image/*" onchange="handlePhotoUpload(event)" style="border: 2px dashed var(--primary); padding: 10px; cursor: pointer;">
+            </div>
+
+            <div class="form-group"><label>Full Name</label><input type="text" id="input-name" oninput="updatePreview()"></div>
+            <div class="form-group"><label>Job Title</label><input type="text" id="input-job" oninput="updatePreview()"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group"><label>Email</label><input type="email" id="input-email" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Phone</label><input type="text" id="input-phone" oninput="updatePreview()"></div>
+            </div>
+            <div class="form-group"><label>Location</label><input type="text" id="input-location" oninput="updatePreview()"></div>
+
+            <h3 style="margin: 20px 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-size: 15px;">Summary</h3>
+            <div class="form-group"><textarea id="input-summary" rows="3" oninput="updatePreview()"></textarea></div>
+
+            <h3 style="margin: 20px 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-size: 15px;">Experience</h3>
+            <div id="experience-container"></div>
+            <button class="add-btn" onclick="addExperience()"><i class="fa-solid fa-plus"></i> Add Experience</button>
+
+            <h3 style="margin: 20px 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-size: 15px;">Education</h3>
+            <div id="education-container"></div>
+            <button class="add-btn" onclick="addEducation()"><i class="fa-solid fa-plus"></i> Add Education</button>
+
+            <h3 style="margin: 20px 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-size: 15px;">Skills</h3>
+            <div id="skills-container"></div>
+            <button class="add-btn" onclick="addSkill()"><i class="fa-solid fa-plus"></i> Add Skill</button>
+
+            <div class="bottom-actions">
+                <button class="btn-primary" style="flex: 1; padding: 12px;" onclick="downloadWord()"><i class="fa-solid fa-file-word"></i> Download Word</button>
+                <button class="btn-outline" style="flex: 1; padding: 12px;" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / PDF</button>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <div id="resume-preview" class="resume-page"></div>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        // --- 1. COMPLETE SAMPLE DATA ---
+        const sampleData = {
+            name: "Diya Agarwal",
+            job: "Senior Product Manager",
+            email: "diya.agarwal@example.com",
+            phone: "+91 98765 43210",
+            location: "Bengaluru, India",
+            photo: "https://i.pravatar.cc/150?img=5",
+            summary: "Results-driven Product Manager with 7+ years of experience leading cross-functional teams to deliver customer-centric products. Proven track record of driving revenue growth, optimizing user experiences, and executing go-to-market strategies for SaaS and B2B platforms.",
+            experience: [
+                { title: "Senior Product Manager", company: "TechVista Solutions", date: "2020 - Present", desc: "Led a team of 12 engineers and designers to launch a flagship SaaS product, increasing ARR by 35%.\nConducted 50+ customer discovery interviews to define product roadmap and prioritize features.\nCollaborated with marketing to execute GTM strategy, achieving 10,000+ sign-ups in the first quarter." },
+                { title: "Product Manager", company: "Innovate Corp", date: "2017 - 2020", desc: "Managed the lifecycle of a mobile B2B application from ideation to launch.\nReduced churn by 15% by implementing user feedback loops and improving UI/UX.\nDefined KPIs and built dashboards to monitor product health and user engagement." }
+            ],
+            education: [
+                { degree: "MBA in Marketing & Strategy", school: "Indian Institute of Management (IIM)", date: "2015 - 2017" },
+                { degree: "B.Tech in Computer Science", school: "Delhi Technological University", date: "2011 - 2015" }
+            ],
+            skills: ["Product Strategy", "Agile & Scrum", "Data Analytics (SQL, Mixpanel)", "Roadmapping", "A/B Testing", "Cross-functional Leadership", "Go-to-Market Strategy"]
+        };
+
+        // --- 2. GENERATE EXACTLY 40 TEMPLATES ---
+        const themeColors = [
+            { name: 'Navy', hex: '#1e3a8a' },
+            { name: 'Teal', hex: '#0d9488' },
+            { name: 'Burgundy', hex: '#881337' },
+            { name: 'Forest', hex: '#166534' },
+            { name: 'Charcoal', hex: '#334155' },
+            { name: 'Slate', hex: '#475569' },
+            { name: 'Indigo', hex: '#4338ca' }
+        ];
+        
+        const fonts = [
+            { name: 'Modern Sans', family: "'Roboto', sans-serif" },
+            { name: 'Classic Serif', family: "'Playfair Display', serif" },
+            { name: 'Bold Impact', family: "'Oswald', sans-serif" },
+            { name: 'Clean Minimal', family: "'Lato', sans-serif" },
+            { name: 'Professional', family: "'Montserrat', sans-serif" },
+            { name: 'Traditional', family: "'Times New Roman', serif" }
+        ];
+
+        const templates = [];
+
+        // PART 1: WITH PHOTO (1-20)
+        const withPhotoTemplates = [
+            { name: "The Executive Navy Sidebar", cols: 2, layout: "left-sidebar" },
+            { name: "The Clean Slate Split", cols: 2, layout: "left-sidebar" },
+            { name: "The Asymmetric Top-Banner", cols: 2, layout: "top-banner" },
+            { name: "The Minimalist Scandinavian", cols: 1, layout: "minimal" },
+            { name: "The Teal Accent Dual-Column", cols: 2, layout: "right-sidebar" },
+            { name: "The Timeline Visual", cols: 1, layout: "timeline" },
+            { name: "The Creative Portfolio Card", cols: 2, layout: "left-sidebar" },
+            { name: "The Hospitality & Aviation Standard", cols: 1, layout: "top-banner" },
+            { name: "The Real Estate & Luxury Sales Closer", cols: 2, layout: "right-sidebar" },
+            { name: "The Corporate Trainer & Public Speaker", cols: 2, layout: "left-sidebar" },
+            { name: "The Social Media & Content Creator", cols: 1, layout: "minimal" },
+            { name: "The Architect & Interior Designer", cols: 1, layout: "timeline" },
+            { name: "The Indian Campus Placement / Fresher", cols: 1, layout: "top-banner" },
+            { name: "The European Europass-Inspired", cols: 2, layout: "left-sidebar" },
+            { name: "The Gulf / Middle East Executive CV", cols: 1, layout: "minimal" },
+            { name: "The Management & HR Generalist", cols: 2, layout: "right-sidebar" },
+            { name: "The Medical & Dental Practitioner", cols: 1, layout: "top-banner" },
+            { name: "The One-Page Infographic Hybrid", cols: 1, layout: "minimal" },
+            { name: "The Freelance Consultant One-Sheet", cols: 1, layout: "timeline" },
+            { name: "The Academic & Faculty Profile", cols: 2, layout: "left-sidebar" }
+        ];
+
+        withPhotoTemplates.forEach((tpl, i) => {
+            templates.push({
+                id: i + 1,
+                name: tpl.name,
+                photo: true,
+                cols: tpl.cols,
+                layout: tpl.layout,
+                defaultColor: themeColors[i % themeColors.length].hex,
+                fontFamily: fonts[i % fonts.length].family,
+                fontName: fonts[i % fonts.length].name
+            });
+        });
+
+        // PART 2: WITHOUT PHOTO (21-40) - Fixed Columns distribution
+        const withoutPhotoTemplates = [
+            { name: "The Jake's / Classic LaTeX Tech", cols: 1, layout: "ats-strict" },
+            { name: "The FAANG / Big Tech Senior Engineer", cols: 1, layout: "ats-strict" },
+            { name: "The Product Manager (PRD-Style)", cols: 1, layout: "ats-strict" },
+            { name: "The Data Science & AI Researcher", cols: 1, layout: "ats-strict" },
+            { name: "The DevOps & Site Reliability Engineer", cols: 1, layout: "ats-strict" },
+            { name: "The QA Automation & SDET Specialist", cols: 2, layout: "two-col-clean" }, // 2 cols
+            { name: "The Ivy League / Wall Street Standard", cols: 1, layout: "ats-strict" },
+            { name: "The MBB Management Consultant", cols: 1, layout: "minimal" },
+            { name: "The Corporate Lawyer / Legal Counsel", cols: 1, layout: "ats-strict" },
+            { name: "The Chartered Accountant / CPA", cols: 1, layout: "ats-strict" },
+            { name: "The Actuary & Risk Analyst", cols: 1, layout: "ats-strict" },
+            { name: "The Enterprise B2B Sales & BD Executive", cols: 2, layout: "two-col-clean" }, // 2 cols
+            { name: "The Digital & Growth Marketing Specialist", cols: 1, layout: "ats-strict" },
+            { name: "The Supply Chain & Logistics Lead", cols: 1, layout: "ats-strict" },
+            { name: "The Project & Program Manager (PMP)", cols: 1, layout: "ats-strict" },
+            { name: "The Customer Success & Account Manager", cols: 1, layout: "minimal" },
+            { name: "The ATS-Strict Fresher / Entry-Level", cols: 1, layout: "ats-strict" },
+            { name: "The Career Change Functional Hybrid", cols: 2, layout: "two-col-clean" }, // 2 cols
+            { name: "The C-Suite / VP Two-Page Executive", cols: 1, layout: "ats-strict" },
+            { name: "The Federal / Government Standard", cols: 1, layout: "ats-strict" }
+        ];
+
+        withoutPhotoTemplates.forEach((tpl, i) => {
+            templates.push({
+                id: i + 21,
+                name: tpl.name,
+                photo: false,
+                cols: tpl.cols,
+                layout: tpl.layout,
+                defaultColor: themeColors[i % themeColors.length].hex,
+                fontFamily: fonts[(i+3) % fonts.length].family,
+                fontName: fonts[(i+3) % fonts.length].name
+            });
+        });
+
+        // --- 3. STATE MANAGEMENT ---
+        let currentTemplate = templates[0];
+        let activeColor = templates[0].defaultColor;
+        let uploadedPhotoBase64 = null;
+
+        // --- 4. INITIALIZATION & NAVIGATION ---
+        function showPage(pageNum) {
+            document.querySelectorAll('[id^="page"]').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page${pageNum}`).classList.remove('hidden');
+            
+            if (pageNum === 2) {
+                initColorPicker();
+                renderTemplates();
+            }
+            if (pageNum === 3) {
+                loadSampleData();
+                document.getElementById('photo-upload-group').classList.toggle('hidden', !currentTemplate.photo);
+                if(!currentTemplate.photo) uploadedPhotoBase64 = null;
+            }
+        }
+
+        function initColorPicker() {
+            const picker = document.getElementById('color-picker');
+            picker.innerHTML = '';
+            themeColors.forEach(color => {
+                const swatch = document.createElement('div');
+                swatch.className = `color-swatch ${color.hex === activeColor ? 'active' : ''}`;
+                swatch.style.backgroundColor = color.hex;
+                swatch.onclick = () => {
+                    activeColor = color.hex;
+                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                    swatch.classList.add('active');
+                    renderTemplates();
+                };
+                picker.appendChild(swatch);
+            });
+        }
+
+        // --- 5. FILTERING & RENDERING (PAGE 2) ---
+        function renderTemplates() {
+            const filterPhoto = document.getElementById('filter-photo').value;
+            const filterCols = document.getElementById('filter-cols').value;
+            const grid = document.getElementById('templates-grid');
+            grid.innerHTML = '';
+
+            const filtered = templates.filter(tpl => {
+                if (filterPhoto !== 'all' && String(tpl.photo) !== filterPhoto) return false;
+                if (filterCols !== 'all' && String(tpl.cols) !== filterCols) return false;
+                return true;
+            });
+
+            if(filtered.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">No templates match your filters.</p>';
+                return;
+            }
+
+            filtered.forEach(tpl => {
+                const card = document.createElement('div');
+                card.className = 'template-card';
+                card.onclick = () => selectTemplate(tpl.id);
+
+                // Generate actual HTML for mini preview
+                const miniHtml = generateResumeHTML(tpl, sampleData, activeColor, true);
+
+                card.innerHTML = `
+                    <div class="mini-resume">
+                        <div class="scale-wrapper">
+                            ${miniHtml}
+                        </div>
+                    </div>
+                    <h3 style="font-size: 14px; margin-top: 10px; height: 40px; display: flex; align-items: center; justify-content: center; line-height: 1.2;">${tpl.name}</h3>
+                    <p style="font-size: 11px; color: #666; margin-bottom: 10px;">${tpl.fontName} | ${tpl.cols} Col</p>
+                    <button class="btn-primary" style="margin-top: auto; padding: 8px 20px; font-size: 13px;">Use Template</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 6. CORE HTML GENERATOR ---
+        function generateResumeHTML(tpl, data, color, isMini = false) {
+            const name = data.name || 'Your Name';
+            const job = data.job || 'Job Title';
+            const email = data.email || 'email@example.com';
+            const phone = data.phone || 'Phone';
+            const location = data.location || 'City, Country';
+            const summary = data.summary;
+
+            let expHtml = '', eduHtml = '', skillsArr = [];
+
+            data.experience.forEach(exp => {
+                if(exp.title || exp.company) {
+                    let descHtml = exp.desc && exp.desc.trim() ? `<ul>${exp.desc.split('\n').filter(p=>p.trim()).map(p => `<li>${p}</li>`).join('')}</ul>` : '';
+                    expHtml += `
+                        <div style="margin-bottom: 12px;">
+                            <div class="item-header"><span>${exp.title}</span><span>${exp.date}</span></div>
+                            <div class="item-sub">${exp.company}</div>
+                            ${descHtml}
+                        </div>`;
+                }
+            });
+
+            data.education.forEach(edu => {
+                if(edu.degree || edu.school) {
+                    eduHtml += `
+                        <div style="margin-bottom: 10px;">
+                            <div class="item-header"><span>${edu.degree}</span><span>${edu.date}</span></div>
+                            <div class="item-sub">${edu.school}</div>
+                        </div>`;
+                }
+            });
+
+            skillsArr = data.skills.filter(s => s.trim() !== '');
+            let skillsList = skillsArr.map(s => `<li>${s}</li>`).join('');
+            let skillsInline = skillsArr.join(' • ');
+
+            // Only use uploaded photo if it's not mini AND tpl supports photo
+            const photoSrc = (!isMini && uploadedPhotoBase64) ? uploadedPhotoBase64 : (tpl.photo ? data.photo : null);
+            const photoHTML = (tpl.photo && photoSrc) ? `<img src="${photoSrc}" class="profile-photo" style="object-fit:cover;">` : '';
+
+            let html = '';
+            
+            if (tpl.layout === 'left-sidebar') {
+                html = `
+                    <div class="resume-page layout-left-sidebar" style="--theme:${color}; --font-main:${tpl.fontFamily}; width:100%; min-height:100%; box-shadow:none;">
+                        <div class="sidebar">
+                            ${photoHTML}
+                            <h1 style="font-size: 22px; margin-bottom:5px;">${name}</h1>
+                            <p style="font-size: 11px; margin-bottom: 20px;">${job}</p>
+                            
+                            <div class="section-title">Contact</div>
+                            <p style="font-size: 11px; margin-bottom: 4px; word-break: break-all;">${email}</p>
+                            <p style="font-size: 11px; margin-bottom: 4px;">${phone}</p>
+                            <p style="font-size: 11px;">${location}</p>
+
+                            <div class="section-title">Skills</div>
+                            <ul style="padding-left:15px; font-size:11px;">${skillsList}</ul>
+                            
+                            <div class="section-title">Education</div>
+                            ${eduHtml}
+                        </div>
+                        <div class="main-content">
+                            <div class="header">
+                                <h1>${name}</h1>
+                                <p style="color:#666; margin-bottom: 20px;">${job}</p>
+                            </div>
+                            ${summary ? `<div class="section-title">Summary</div><p style="font-size:13px; margin-bottom:20px;">${summary}</p>` : ''}
+                            <div class="section-title">Experience</div>
+                            ${expHtml}
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (tpl.layout === 'right-sidebar') {
+                html = `
+                    <div class="resume-page layout-right-sidebar" style="--theme:${color}; --font-main:${tpl.fontFamily}; width:100%; min-height:100%; box-shadow:none;">
+                        <div class="main-content">
+                            <div class="header">
+                                ${photoHTML}
+                                <h1>${name}</h1>
+                                <p style="color:#666; margin-bottom: 20px;">${job}</p>
+                            </div>
+                            ${summary ? `<div class="section-title">Summary</div><p style="font-size:13px; margin-bottom:20px;">${summary}</p>` : ''}
+                            <div class="section-title">Experience</div>
+                            ${expHtml}
+                        </div>
+                        <div class="right-sidebar">
+                            <div class="section-title" style="margin-top:0;">Contact</div>
+                            <p style="font-size: 11px; margin-bottom: 4px; word-break: break-all;">${email}</p>
+                            <p style="font-size: 11px; margin-bottom: 4px;">${phone}</p>
+                            <p style="font-size: 11px; margin-bottom: 20px;">${location}</p>
+                            
+                            <div class="section-title">Skills</div>
+                            <ul style="padding-left:15px; font-size:11px;">${skillsList}</ul>
+                            
+                            <div class="section-title">Education</div>
+                            ${eduHtml}
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (tpl.layout === 'top-banner') {
+                html = `
+                    <div class="resume-page layout-top-banner" style="--theme:${color}; --font-main:${tpl.fontFamily}; width:100%; min-height:100%; box-shadow:none;">
+                        <div class="header-bg">
+                            ${photoHTML}
+                            <h1>${name}</h1>
+                            <p>${job}</p>
+                            <p style="font-size: 11px; margin-top: 10px;">${email} | ${phone} | ${location}</p>
+                        </div>
+                        <div class="body-content">
+                            <div>
+                                ${summary ? `<div class="section-title">Summary</div><p style="font-size:13px; margin-bottom:20px;">${summary}</p>` : ''}
+                                <div class="section-title">Experience</div>
+                                ${expHtml}
+                            </div>
+                            <div>
+                                <div class="section-title" style="margin-top:0;">Skills</div>
+                                <ul style="padding-left:15px; font-size:11px;">${skillsList}</ul>
+                                <div class="section-title">Education</div>
+                                ${eduHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (tpl.layout === 'timeline') {
+                html = `
+                    <div class="resume-page layout-timeline" style="--theme:${color}; --font-main:${tpl.fontFamily}; width:100%; min-height:100%; box-shadow:none;">
+                        <div class="header">
+                            ${photoHTML}
+                            <h1>${name}</h1>
+                            <p style="font-size:14px; color: #555;">${job}</p>
+                            <p style="font-size: 11px; margin-top: 10px; color: #666;">${email} &nbsp;|&nbsp; ${phone} &nbsp;|&nbsp; ${location}</p>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+                            <div>
+                                ${summary ? `<div class="section-title">Profile</div><p style="font-size:13px;">${summary}</p>` : ''}
+                                <div class="section-title">Skills</div>
+                                <ul style="padding-left:15px; font-size:11px;">${skillsList}</ul>
+                            </div>
+                            <div class="timeline-container">
+                                <div class="section-title" style="margin-top:0; border:none;">Experience</div>
+                                ${expHtml.replace(/<div style="margin-bottom: 12px;">/g, '<div class="timeline-item">')}
+                                <div class="section-title" style="border:none;">Education</div>
+                                ${eduHtml.replace(/<div style="margin-bottom: 10px;">/g, '<div class="timeline-item">')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            else if (tpl.layout === 'ats-strict') {
+                html = `
+                    <div class="resume-page layout-ats-strict" style="--theme:${color}; --font-main:${tpl.fontFamily}; width:100%; min-height:100%; box-shadow:none;">
+                        <div class="header">
+                            <h1>${name}</h1>
+                            <p>${job}</p>
+                            <p>${email} | ${phone} | ${location}</p>
+                        </div>
+                        <div class="section-title">Summary</div>
+                        <p>${summary}</p>
+                        <div class="section-title">Experience</div>
+                        ${expHtml}
+                        <div class="section-title">Education</div>
+                        ${eduHtml}
+                        <div class="section-title">Skills</div>
+                        <p>${skillsInline}</p>
+                    </div>
+                `;
+            }
+            else if (tpl.layout === 'two-col-clean') {
+                html = `
+                    <div class="resume-page layout-two-col-clean" style="--theme:${color}; --font-main:${tpl.fontFamily}; width:100%; min-height:100%; box-shadow:none;">
+                        <div class="header">
+                            <h1>${name}</h1>
+                            <p>${job} | ${email} | ${phone} | ${location}</p>
+                        </div>
+                        <div>
+                            <div class="section-title">Summary</div>
+                            <p>${summary}</p>
+                            <div class="section-title">Experience</div>
+                            ${expHtml}
+                        </div>
+                        <div>
+                            <div class="section-title">Skills</div>
+                            <ul style="padding-left:15px; font-size:11px;">${skillsList}</ul>
+                            <div class="section-title">Education</div>
+                            ${eduHtml}
+                        </div>
+                    </div>
+                `;
+            }
+            else { // Minimal
+                html = `
+                    <div class="resume-page layout-minimal" style="--theme:${color}; --font-main:${tpl.fontFamily}; width:100%; min-height:100%; box-shadow:none;">
+                        <div class="header">
+                            ${photoHTML}
+                            <h1>${name}</h1>
+                            <p style="font-size:14px; color: #555;">${job}</p>
+                            <p style="font-size: 11px; margin-top: 10px; color: #666;">${email} &nbsp;|&nbsp; ${phone} &nbsp;|&nbsp; ${location}</p>
+                        </div>
+                        ${summary ? `<div class="section-title">Summary</div><p style="font-size:13px; margin-bottom:20px; text-align:center;">${summary}</p>` : ''}
+                        <div class="section-title">Experience</div>
+                        ${expHtml}
+                        <div class="section-title">Education</div>
+                        ${eduHtml}
+                        <div class="section-title">Skills</div>
+                        <p style="font-size:13px; text-align:center;">${skillsInline}</p>
+                    </div>
+                `;
+            }
+            return html;
+        }
+
+        // --- 7. SELECT TEMPLATE & DATA LOADING (PAGE 3) ---
+        function selectTemplate(id) {
+            currentTemplate = templates.find(t => t.id === id);
+            showPage(3);
+        }
+
+        function loadSampleData() {
+            document.getElementById('input-name').value = sampleData.name;
+            document.getElementById('input-job').value = sampleData.job;
+            document.getElementById('input-email').value = sampleData.email;
+            document.getElementById('input-phone').value = sampleData.phone;
+            document.getElementById('input-location').value = sampleData.location;
+            document.getElementById('input-summary').value = sampleData.summary;
+
+            document.getElementById('experience-container').innerHTML = '';
+            sampleData.experience.forEach((exp, i) => createExpDOM(i+1, exp.title, exp.company, exp.date, exp.desc));
+
+            document.getElementById('education-container').innerHTML = '';
+            sampleData.education.forEach((edu, i) => createEduDOM(i+1, edu.degree, edu.school, edu.date));
+
+            document.getElementById('skills-container').innerHTML = '';
+            sampleData.skills.forEach((skill, i) => createSkillDOM(i+1, skill));
+
+            updatePreview();
+        }
+
+        function clearData() {
+            if(confirm("Are you sure you want to clear all data?")) {
+                document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(el => el.value = '');
+                document.getElementById('experience-container').innerHTML = '';
+                document.getElementById('education-container').innerHTML = '';
+                document.getElementById('skills-container').innerHTML = '';
+                uploadedPhotoBase64 = null;
+                document.getElementById('input-photo').value = '';
+                addExperience(); addEducation(); addSkill();
+                updatePreview();
+            }
+        }
+
+        // --- 8. PHOTO UPLOAD ---
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedPhotoBase64 = e.target.result;
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // --- 9. DYNAMIC FORM MANAGEMENT ---
+        let expId = 0, eduId = 0, skillId = 0;
+
+        function createExpDOM(id, title = '', company = '', date = '', desc = '') {
+            const div = document.createElement('div');
+            div.className = 'dynamic-item';
+            div.id = `exp-${id}`;
+            div.innerHTML = `
+                <button class="remove-btn" onclick="document.getElementById('exp-${id}').remove(); updatePreview();"><i class="fa-solid fa-xmark"></i></button>
+                <div class="form-group"><label>Job Title</label><input type="text" class="exp-title" value="${title}" oninput="updatePreview()"></div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div class="form-group"><label>Company</label><input type="text" class="exp-comp" value="${company}" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>Dates</label><input type="text" class="exp-date" value="${date}" oninput="updatePreview()"></div>
+                </div>
+                <div class="form-group"><label>Description</label><textarea class="exp-desc" rows="3" oninput="updatePreview()">${desc}</textarea></div>
+            `;
+            document.getElementById('experience-container').appendChild(div);
+        }
+        function addExperience() { expId++; createExpDOM(expId); updatePreview(); }
+
+        function createEduDOM(id, degree = '', school = '', date = '') {
+            const div = document.createElement('div');
+            div.className = 'dynamic-item';
+            div.id = `edu-${id}`;
+            div.innerHTML = `
+                <button class="remove-btn" onclick="document.getElementById('edu-${id}').remove(); updatePreview();"><i class="fa-solid fa-xmark"></i></button>
+                <div class="form-group"><label>Degree</label><input type="text" class="edu-deg" value="${degree}" oninput="updatePreview()"></div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div class="form-group"><label>School</label><input type="text" class="edu-sch" value="${school}" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>Year</label><input type="text" class="edu-date" value="${date}" oninput="updatePreview()"></div>
+                </div>
+            `;
+            document.getElementById('education-container').appendChild(div);
+        }
+        function addEducation() { eduId++; createEduDOM(eduId); updatePreview(); }
+
+        function createSkillDOM(id, skill = '') {
+            const div = document.createElement('div');
+            div.className = 'dynamic-item';
+            div.style.padding = '8px'; div.style.display = 'flex'; div.style.gap = '8px'; div.style.alignItems = 'center';
+            div.id = `skill-${id}`;
+            div.innerHTML = `
+                <input type="text" class="skill-input" value="${skill}" oninput="updatePreview()" style="margin-bottom: 0;" placeholder="e.g. JavaScript">
+                <button class="remove-btn" style="position: static;" onclick="document.getElementById('skill-${id}').remove(); updatePreview();"><i class="fa-solid fa-xmark"></i></button>
+            `;
+            document.getElementById('skills-container').appendChild(div);
+        }
+        function addSkill() { skillId++; createSkillDOM(skillId); updatePreview(); }
+
+        // --- 10. LIVE PREVIEW RENDERING ---
+        function updatePreview() {
+            // Gather data from form
+            const data = {
+                name: document.getElementById('input-name').value,
+                job: document.getElementById('input-job').value,
+                email: document.getElementById('input-email').value,
+                phone: document.getElementById('input-phone').value,
+                location: document.getElementById('input-location').value,
+                summary: document.getElementById('input-summary').value,
+                experience: [],
+                education: [],
+                skills: []
+            };
+
+            document.querySelectorAll('[id^="exp-"]').forEach(item => {
+                data.experience.push({
+                    title: item.querySelector('.exp-title').value,
+                    company: item.querySelector('.exp-comp').value,
+                    date: item.querySelector('.exp-date').value,
+                    desc: item.querySelector('.exp-desc').value
+                });
+            });
+
+            document.querySelectorAll('[id^="edu-"]').forEach(item => {
+                data.education.push({
+                    degree: item.querySelector('.edu-deg').value,
+                    school: item.querySelector('.edu-sch').value,
+                    date: item.querySelector('.edu-date').value
+                });
+            });
+
+            document.querySelectorAll('.skill-input').forEach(input => {
+                data.skills.push(input.value);
+            });
+
+            // Generate and inject HTML using the shared function
+            const preview = document.getElementById('resume-preview');
+            preview.innerHTML = generateResumeHTML(currentTemplate, data, activeColor, false);
+        }
+
+        // --- 11. EXPORT TO WORD ---
+        function downloadWord() {
+            const previewContent = document.getElementById('resume-preview').innerHTML;
+            
+            let css = `
+                <style>
+                    body { font-family: ${currentTemplate.fontFamily}; color: #333; margin: 0; padding: 20px;}
+                    .resume-page { width: 100%; max-width: 100%; box-shadow: none; }
+                    .section-title { font-weight: bold; text-transform: uppercase; margin: 15px 0 8px 0; font-size: 14px; color: ${activeColor}; border-bottom: 2px solid ${activeColor}; }
+                    .item-header { font-weight: bold; display: flex; justify-content: space-between; }
+                    .item-sub { font-style: italic; color: #555; font-size: 12px; }
+                    ul { padding-left: 20px; }
+                    .profile-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+                </style>
+            `;
+
+            // Handle complex CSS Grids using Tables for Word compatibility
+            if (currentTemplate.layout === 'left-sidebar') {
+                css += `<style>
+                    .layout-left-sidebar { display: table; width: 100%; }
+                    .sidebar { display: table-cell; width: 30%; background-color: ${activeColor}; color: white; padding: 20px; vertical-align: top; }
+                    .sidebar h1, .sidebar p, .sidebar .section-title { color: white !important; border-bottom-color: white !important; }
+                    .main-content { display: table-cell; width: 70%; padding: 20px; vertical-align: top; }
+                </style>`;
+            } 
+            else if (currentTemplate.layout === 'right-sidebar') {
+                css += `<style>
+                    .layout-right-sidebar { display: table; width: 100%; }
+                    .main-content { display: table-cell; width: 70%; padding: 20px; vertical-align: top; }
+                    .right-sidebar { display: table-cell; width: 30%; background-color: #f1f5f9; border-left: 4px solid ${activeColor}; padding: 20px; vertical-align: top; }
+                </style>`;
+            }
+            else if (currentTemplate.layout === 'top-banner') {
+                css += `<style>
+                    .header-bg { background-color: ${activeColor}; color: white; padding: 20px; text-align: center; }
+                    .header-bg h1, .header-bg p { color: white; }
+                    .body-content { display: table; width: 100%; margin-top: 20px;}
+                    .body-content > div { display: table-cell; width: 50%; padding: 10px; vertical-align: top; }
+                </style>`;
+            }
+            else if (currentTemplate.layout === 'two-col-clean') {
+                css += `<style>
+                    .header { text-align: center; border-bottom: 2px solid ${activeColor}; padding-bottom: 10px; margin-bottom: 20px;}
+                    .layout-two-col-clean { display: table; width: 100%; }
+                    .layout-two-col-clean > div:not(.header) { display: table-cell; width: 50%; padding: 10px; vertical-align: top; }
+                </style>`;
+            }
+
+            const html = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>Resume</title>${css}</head>
+                <body>${previewContent}</body>
+                </html>
+            `;
+
+            const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${document.getElementById('input-name').value || 'My'}_Resume.doc`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize UI
+        window.onload = () => { renderTemplates(); };
+    </script>
+</body>
+</html>
